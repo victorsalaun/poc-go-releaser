@@ -9,35 +9,12 @@ builds:
       - linux
       - windows
       - darwin
-
-signs:
-  - cmd: cosign
-    env:
-      - COSIGN_EXPERIMENTAL=1
-    certificate: '${artifact}.pem'
-    args:
-      - sign-blob
-      - '--output-certificate=${certificate}'
-      - '--output-signature=${signature}'
-      - '${artifact}'
-      - "--yes"
-    artifacts: checksum
-    output: true
+    ldflags:
+      - -s -w -X github.com/victorsalaun/qlik-compliance-verifier/internal/build.Version={{.Version}} -X github.com/victorsalaun/qlik-compliance-verifier/internal/build.Date={{ .CommitDate }}
 
 dockers:
   - image_templates: [ "ghcr.io/victorsalaun/poc-go-releaser:{{ .Version }}" ]
     dockerfile: Dockerfile
-
-docker_signs:
-  - cmd: cosign
-    env:
-      - COSIGN_EXPERIMENTAL=1
-    artifacts: images
-    output: true
-    args:
-      - 'sign'
-      - '${artifact}'
-      - "--yes"
 
 archives:
   - format: tar.gz
