@@ -27,6 +27,6 @@ func NewCmdVersion(f *cmdutil.Factory) *cobra.Command {
 }
 
 func run(opts *VersionOptions) error {
-	_, err := fmt.Fprintf(opts.IO.Out, "QCV %s (%s)", build.Version, build.Date)
+	_, err := fmt.Fprintf(opts.IO.Out, "poc-go-releaser %s (%s)", build.Version, build.Date)
 	return err
 }
