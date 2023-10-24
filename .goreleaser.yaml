@@ -18,7 +18,7 @@ checksum:
 
 signs:
   - cmd: cosign
-    stdin: '{{ .Env.COSIGN_PASWORDD }}'
+    stdin: '{{ .Env.COSIGN_PASSWORD }}'
     args: [ "sign-blob", "-key=cosign.key", "-output=${signature}", "${artifact}" ]
     artifacts: checksum
 
@@ -28,7 +28,7 @@ dockers:
 
 docker_signs:
   - artifacts: manifests
-    stdin: '{{ .Env.COSIGN_PWD }}'
+    stdin: '{{ .Env.COSIGN_PASSWORD }}'
 
 archives:
   - format: tar.gz
