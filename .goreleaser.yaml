@@ -11,11 +11,24 @@ builds:
       - windows
       - darwin
     ldflags:
-      - -s -w -X github.com/victorsalaun/poc-go-releaser/internal/build.Version={{.Version}} -X github.com/victorsalaun/poc-go-releaserr/internal/build.Date={{ .CommitDate }}
+      - -s -w -X github.com/victorsalaun/poc-go-releaser/internal/build.Version={{.Version}} -X github.com/victorsalaun/poc-go-releaser/internal/build.Date={{ .CommitDate }}
+
+checksum:
+  name_template: 'checksums.txt'
+
+signs:
+  - cmd: cosign
+    stdin: '{{ .Env.COSIGN_PASWORDD }}'
+    args: [ "sign-blob", "-key=cosign.key", "-output=${signature}", "${artifact}" ]
+    artifacts: checksum
 
 dockers:
   - image_templates: [ "ghcr.io/victorsalaun/poc-go-releaser:{{ .Version }}" ]
     dockerfile: Dockerfile
+
+docker_signs:
+  - artifacts: manifests
+    stdin: '{{ .Env.COSIGN_PWD }}'
 
 archives:
   - format: tar.gz
